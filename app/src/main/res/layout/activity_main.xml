@@ -16,8 +16,8 @@
         android:hint="Wifi fingerprint name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/scanNumber"
-        android:layout_alignEnd="@+id/scanNumber" />
+        android:layout_alignRight="@+id/roomName"
+        android:layout_alignEnd="@+id/roomName" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -30,25 +30,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scanNumber"
-        android:hint="Number of scans"
-        android:layout_below="@+id/roomName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
         android:id="@+id/startButton"
-        android:layout_below="@+id/scanNumber"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/avgTime" />
 
     <Button
         android:layout_width="wrap_content"
@@ -71,6 +60,47 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Last scan interval [ms]: "
+        android:id="@+id/avgTime"
+        android:layout_below="@+id/roomName"
+        android:textSize="18sp"
+        android:layout_margin="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:id="@+id/intervalText"
+        android:textSize="18sp"
+        android:layout_alignTop="@+id/avgTime"
+        android:layout_toRightOf="@+id/avgTime"
+        android:layout_toEndOf="@+id/avgTime" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Export"
+        android:id="@+id/exportButton"
+        android:layout_above="@+id/textView"
+        android:layout_toRightOf="@+id/stopButton"
+        android:layout_toEndOf="@+id/stopButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:id="@+id/clearButton"
+        android:layout_above="@+id/textView"
+        android:layout_toRightOf="@+id/exportButton"
+        android:layout_toEndOf="@+id/exportButton" />
 
 
 </RelativeLayout>
