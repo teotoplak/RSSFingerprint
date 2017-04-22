@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 stopButton.setEnabled(false);
                 EditText fingerprintEdit = (EditText) findViewById(R.id.fingerprintName);
                 String fingerprintName = fingerprintEdit.getText().toString();
-                EditText roomNameEdit = (EditText) findViewById(R.id.fingerprintName);
+                EditText roomNameEdit = (EditText) findViewById(R.id.roomName);
                 String roomName = roomNameEdit.getText().toString();
                 String output = "";
                 output += "Fingerprint name: " + fingerprintName + "\n";
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (IOException e) {
                     Log.e("Exception", "File write failed: " + e.toString());
-                    Toast.makeText(getApplicationContext(), "Problem writing to text file!", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "Problem writing to text file!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 clearAllFiles();
+                Toast.makeText(getApplicationContext(), "Clearing fingerprint file...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+            //After this point you wait for callback in onRequestPermissionsResult
 
         } else {
             startScanning();
@@ -138,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Clearing both external and internal fingerprint file
+     */
     public void clearAllFiles() {
         File file = new File(getApplicationContext().getExternalFilesDir(null), FINGERPRINT_FILE_NAME);
         file.delete();
@@ -145,11 +149,14 @@ public class MainActivity extends AppCompatActivity {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getApplicationContext().openFileOutput(FINGERPRINT_FILE_NAME, MODE_ENABLE_WRITE_AHEAD_LOGGING));
             outputStreamWriter.write("");
             outputStreamWriter.close();
+            TextView textView = (TextView) findViewById(R.id.fileLocationText);
+            textView.setText("");
         }
         catch (IOException e) {
             Log.e("Exception", "File clear failed: " + e.toString());
             Toast.makeText(getApplicationContext(), "Problem clearing to text file!", Toast.LENGTH_LONG);
         }
+
     }
 
 
@@ -168,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
             os.close(); //Close it
             Log.i("Copying to", "" + context.getExternalFilesDir(null) + File.separator + filename);
             Log.i("Copying from", context.getFilesDir() + File.separator + filename + "");
+            TextView textView = (TextView) findViewById(R.id.fileLocationText);
+            textView.setText("Exported to: " + context.getExternalFilesDir(null).toString());
             return extFileLocation;
         } catch (Exception e) {
             Toast.makeText(context, "File write failed: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show(); //if there's an error, make a piece of toast and serve it up
