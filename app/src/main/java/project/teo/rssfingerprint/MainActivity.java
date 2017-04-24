@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private final int INTERVAL_FOR_SCAN = 50;
     private final String FINGERPRINT_FILE_NAME = "RSSFingerPrint.txt";
     private boolean writtingToFile = false;
-    private Map<String,List<Integer>> rssMap = new HashMap<>();
+    private Map<AccessPointPair,List<Integer>> rssMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +91,11 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 output += "Date: " + format1.format(cal.getTime()) + "\n";
                 output += "---------------------" + "\n";
-                for (Map.Entry<String,List<Integer>> entry : rssMap.entrySet()) {
-                    output += entry.getKey() + " " + convertListToString(entry.getValue()) + "\n";
+                for (Map.Entry<AccessPointPair,List<Integer>> entry : rssMap.entrySet()) {
+                    AccessPointPair ap = (AccessPointPair) entry.getKey();
+                    output += ap.getSSID() + " (" + ap.getBSSID() + ") " + convertListToString(entry.getValue()) + "\n";
                 }
+                output += "\n";
                 output += "\n";
                 try {
                     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getApplicationContext().openFileOutput(FINGERPRINT_FILE_NAME, MODE_APPEND));
@@ -248,14 +250,16 @@ public class MainActivity extends AppCompatActivity {
             String string = "";
             for (ScanResult result : wifiList) {
                     String ssid = result.SSID;
+                    String bssid = result.BSSID;
+                    AccessPointPair ap = new AccessPointPair(bssid, ssid);
                     Integer level = result.level;
                 if (writtingToFile) {
-                    if (!rssMap.containsKey(ssid)) {
-                        rssMap.put(ssid, new LinkedList<Integer>());
+                    if (!rssMap.containsKey(ap)) {
+                        rssMap.put(ap, new LinkedList<Integer>());
                     }
-                    rssMap.get(ssid).add(level);
+                    rssMap.get(ap).add(level);
                 }
-                string += level + " " + ssid  + "\n";
+                string += level + " " + ssid + " (" + bssid   + ")\n";
             }
             writeToTextArea(string);
             writeScanningInterval();
@@ -276,7 +280,5 @@ public class MainActivity extends AppCompatActivity {
         finalString += "]";
         return  finalString;
     }
-
-
 
 }
